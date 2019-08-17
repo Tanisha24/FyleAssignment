@@ -7,6 +7,9 @@ parser = reqparse.RequestParser()
 parser.add_argument('username', help = 'This field cannot be blank', required = True)
 parser.add_argument('password', help = 'This field cannot be blank', required = True)
 
+parser2 = reqparse.RequestParser()
+parser2.add_argument('ifsc', help = 'This field cannot be blank', required = True)
+
 class UserRegistration(Resource):
     def post(self):
         data = parser.parse_args()
@@ -94,3 +97,25 @@ class SecretResource(Resource):
         return {
             'answer': 42
         }
+
+class BankDetailsResource(Resource):
+    @jwt_required
+    def get(self):
+        data=parser2.parse_args()
+        ifsc=data['ifsc']
+        branch_details=models.BranchModel.find_by_ifsc(data['ifsc'])
+        print(branch_details)
+        if branch_details is None:
+            return {'message': 'Ifsc {} doesn\'t exist'.format(data['ifsc'])}
+        else:
+            print(branch_details)
+            bank_details=models.BankModel.find_by_id(branch_details.bank_id)
+            return {
+                'ifsc': branch_details.ifsc,
+                'bank_id':branch_details.bank_id,
+                'bank':bank_details.name,
+                'branch':branch_details.branch,
+                'address':branch_details.address,
+                'city':branch_details.city,
+                'state':branch_details.state
+            }
