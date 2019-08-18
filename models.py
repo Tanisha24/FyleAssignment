@@ -1,4 +1,5 @@
 from run import db
+from sqlalchemy import and_, or_, not_
 
 class UserModel(db.Model):
     __tabelname__='users'
@@ -74,5 +75,18 @@ class BranchModel(db.Model):
         return cls.query.filter_by(ifsc = ifsc).first()
 
     @classmethod
-    def find_by_name(cls, name):
-        return cls.query.filter_by(name = name).first()
+    def find_by_id_city(cls, id,city,name):
+        idInt=int(id)
+        def to_json(x):
+            return {
+                'ifsc': x.ifsc,
+                'bank_id': x.bank_id,
+                'branch': x.branch,
+                'address': x.address,
+                'city': x.city,
+                'district': x.district,
+                'state': x.state
+
+            }
+        return {name: list(map(lambda x: to_json(x), BranchModel.query.filter_by(bank_id=idInt).filter_by(city=city)))}
+        # return cls.query.filter_by(name = name).first()   filter(and_(bank_id == idInt, city=city))))}

@@ -1,6 +1,8 @@
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 
+
+
 import models
 
 parser = reqparse.RequestParser()
@@ -9,6 +11,10 @@ parser.add_argument('password', help = 'This field cannot be blank', required = 
 
 parser2 = reqparse.RequestParser()
 parser2.add_argument('ifsc', help = 'This field cannot be blank', required = True)
+
+parser3 = reqparse.RequestParser()
+parser3.add_argument('name', help = 'This field cannot be blank', required = True)
+parser3.add_argument('city', help = 'This field cannot be blank', required = True)
 
 class UserRegistration(Resource):
     def post(self):
@@ -119,3 +125,16 @@ class BankDetailsResource(Resource):
                 'city':branch_details.city,
                 'state':branch_details.state
             }
+
+
+class BranchesDetailsResource(Resource):
+    @jwt_required
+    def get(self):
+        data=parser3.parse_args()
+        bank_detail=models.BankModel.find_by_name(data['name'])
+        print(bank_detail.id)
+        if not bank_detail:
+            return {'message':'Bank {} doesn\'t exist'.format(data['name'])}
+        else:
+            branch_details=models.BranchModel.find_by_id_city(bank_detail.id,data['city'],data['name'])
+            return branch_details
