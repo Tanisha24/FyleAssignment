@@ -1,4 +1,5 @@
 from flask_restful import Resource, reqparse
+import datetime
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 
 
@@ -15,6 +16,10 @@ parser2.add_argument('ifsc', help = 'This field cannot be blank', required = Tru
 parser3 = reqparse.RequestParser()
 parser3.add_argument('name', help = 'This field cannot be blank', required = True)
 parser3.add_argument('city', help = 'This field cannot be blank', required = True)
+parser3.add_argument('page', help = 'This field cannot be blank', required = False)
+
+parser4 = reqparse.RequestParser()
+parser4.add_argument('page', help = 'This field cannot be blank', required = False)
 
 class UserRegistration(Resource):
     def post(self):
@@ -46,8 +51,9 @@ class UserLogin(Resource):
             return {'message': 'User {} doesn\'t exist'.format(data['username'])}
 
         if data['password'] == current_user.password:
-            access_token = create_access_token(identity = data['username'])
-            refresh_token = create_refresh_token(identity = data['username'])
+            expires = datetime.timedelta(days=5)
+            access_token = create_access_token(identity = data['username'], expires_delta=expires)
+            refresh_token = create_refresh_token(identity = data['username'], expires_delta=expires)
             return {'message': 'Logged in as {}'.format(current_user.username),
                     'access_token': access_token,
                     'refresh_token': refresh_token}
@@ -133,16 +139,19 @@ class BranchesDetailsResource(Resource):
         data=parser3.parse_args()
         bank_detail=models.BankModel.find_by_name(data['name'])
         print(bank_detail.id)
+
         if not bank_detail:
             return {'message':'Bank {} doesn\'t exist'.format(data['name'])}
         else:
-            branch_details=models.BranchModel.find_by_id_city(bank_detail.id,data['city'],data['name'])
+            branch_details=models.BranchModel.find_by_id_city(bank_detail.id,data['city'],data['name'],data['page'])
             return branch_details
 
 class AllBanks(Resource):
     def get(self):
-        return models.BankModel.return_all()
+        data = parser4.parse_args()
+        return models.BankModel.return_all(data['page'])
 
 class AllBranches(Resource):
     def get(self):
-        return models.BranchModel.return_all()
+        data = parser4.parse_args()
+        return models.BranchModel.return_all(data['page'])

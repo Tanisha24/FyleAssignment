@@ -60,13 +60,20 @@ class BankModel(db.Model):
         return cls.query.filter_by(name = name).first()
 
     @classmethod
-    def return_all(cls):
+    def return_all(cls,page):
         def to_json(x):
             return {
                 'id': x.id,
                 'name': x.name
             }
-        return {'banks': list(map(lambda x: to_json(x), BankModel.query.all()))}
+        query= BankModel.query
+        print(page)
+        page_size=20
+        if page:
+            query = query.limit(page_size)
+            query = query.offset(int(page)*page_size)
+        query=query.all()
+        return {'banks': list(map(lambda x: to_json(x), query))}
 
 class BranchModel(db.Model):
     __tablename__ ='branches'
@@ -84,7 +91,7 @@ class BranchModel(db.Model):
         return cls.query.filter_by(ifsc = ifsc).first()
 
     @classmethod
-    def find_by_id_city(cls, id,city,name):
+    def find_by_id_city(cls, id,city,name,page):
         idInt=int(id)
         def to_json(x):
             return {
@@ -97,11 +104,16 @@ class BranchModel(db.Model):
                 'state': x.state
 
             }
-        return {name: list(map(lambda x: to_json(x), BranchModel.query.filter_by(bank_id=idInt).filter_by(city=city)))}
-
+        query= BranchModel.query.filter_by(bank_id=idInt).filter_by(city=city)
+        page_size=20
+        if page:
+            query = query.limit(page_size)
+            query = query.offset(int(page)*page_size)
+        return {name: list(map(lambda x: to_json(x), query))}
+        # return {name: list(map(lambda x: to_json(x), BranchModel.query.filter_by(bank_id=idInt).filter_by(city=city)))}
 
     @classmethod
-    def return_all(cls):
+    def return_all(cls,page):
         def to_json(x):
             return {
                 'ifsc': x.ifsc,
@@ -113,5 +125,13 @@ class BranchModel(db.Model):
                 'state': x.state
 
             }
-        return {'Branches': list(map(lambda x: to_json(x), BranchModel.query.all()))}
+        query= BranchModel.query
+        page_size=20
+        # if page_size:
+        #     query = query.limit(page_size)
+        if page:
+            query = query.limit(page_size)
+            query = query.offset(int(page)*page_size)
+        query=query.all()
+        return {'Branches': list(map(lambda x: to_json(x), query))}
         # return cls.query.filter_by(name = name).first()   filter(and_(bank_id == idInt, city=city))))}
