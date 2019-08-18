@@ -48,7 +48,7 @@ This API has been deployed on [Heroku](https://bank-data-proj-api-heroku.herokua
 ```
 curl -X GET \
   'https://bank-data-proj-api-heroku.herokuapp.com/bankifsc?ifsc=UTBI0PBZD72' \
-  -H 'Postman-Token: 67c2ab1d-2d73-4d73-ba9f-b18eeb1cbda9' \
+  -H 'Postman-Token: ce7631ee-eab8-4711-98f8-edca2256a4a3' \
   -H 'cache-control: no-cache'
 ```
 
@@ -62,7 +62,7 @@ curl -X GET \
 ```
 curl -X GET \
   'https://bank-data-proj-api-heroku.herokuapp.com/branchesquery?name=UNITED%20BANK%20OF%20INDIA&city=BANGALORE' \
-  -H 'Postman-Token: ce8184a8-0086-4743-afac-0b3c4a736758' \
+  -H 'Postman-Token: 7f89b7d5-b47a-463a-8255-a86dd1df5927' \
   -H 'cache-control: no-cache'
 ```
 
