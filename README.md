@@ -46,10 +46,7 @@ This API has been deployed on [Heroku](https://bank-data-proj-api-heroku.herokua
   **Parameters**:ifsc</br>
  
 ```
-curl -X GET \
-  'https://bank-data-proj-api-heroku.herokuapp.com/bankifsc?ifsc=UTBI0PBZD72' \
-  -H 'Postman-Token: ce7631ee-eab8-4711-98f8-edca2256a4a3' \
-  -H 'cache-control: no-cache'
+curl -H "Authorization: Bearer %ACCESS%" "https://bank-data-proj-api-heroku.herokuapp.com/bankifsc?ifsc=UTBI0PBZD72"
 ```
 
 - ### **_/branchesquery_**</br> 
@@ -60,10 +57,7 @@ curl -X GET \
   _Page and Size are optional parameters. Size indicates LIMIT and page indicates OFFSET._
 
 ```
-curl -X GET \
-  'https://bank-data-proj-api-heroku.herokuapp.com/branchesquery?name=UNITED%20BANK%20OF%20INDIA&city=BANGALORE' \
-  -H 'Postman-Token: 7f89b7d5-b47a-463a-8255-a86dd1df5927' \
-  -H 'cache-control: no-cache'
+curl -H "Authorization: Bearer %ACCESS%" "https://bank-data-proj-api-heroku.herokuapp.com/branchesquery?name=UNITED%20BANK%20OF%20INDIA&city=BANGALORE"
 ```
 
 - ### **_/branches_**</br> 
