@@ -1,6 +1,7 @@
-from run import db
+# import app
 from sqlalchemy import and_, or_, not_
-
+from flask_sqlalchemy import SQLAlchemy
+db = SQLAlchemy()
 class UserModel(db.Model):
     __tabelname__='users'
     username=db.Column(db.String(120), primary_key= True, nullable=False)
