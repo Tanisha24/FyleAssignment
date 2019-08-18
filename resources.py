@@ -138,3 +138,11 @@ class BranchesDetailsResource(Resource):
         else:
             branch_details=models.BranchModel.find_by_id_city(bank_detail.id,data['city'],data['name'])
             return branch_details
+
+class AllBanks(Resource):
+    def get(self):
+        return models.BankModel.return_all()
+
+class AllBranches(Resource):
+    def get(self):
+        return models.BranchModel.return_all()

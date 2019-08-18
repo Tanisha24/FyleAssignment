@@ -59,6 +59,15 @@ class BankModel(db.Model):
     def find_by_name(cls, name):
         return cls.query.filter_by(name = name).first()
 
+    @classmethod
+    def return_all(cls):
+        def to_json(x):
+            return {
+                'id': x.id,
+                'name': x.name
+            }
+        return {'banks': list(map(lambda x: to_json(x), BankModel.query.all()))}
+
 class BranchModel(db.Model):
     __tablename__ ='branches'
     ifsc=db.Column(db.String(11), primary_key=True, nullable=False)
@@ -89,4 +98,20 @@ class BranchModel(db.Model):
 
             }
         return {name: list(map(lambda x: to_json(x), BranchModel.query.filter_by(bank_id=idInt).filter_by(city=city)))}
+
+
+    @classmethod
+    def return_all(cls):
+        def to_json(x):
+            return {
+                'ifsc': x.ifsc,
+                'bank_id': x.bank_id,
+                'branch': x.branch,
+                'address': x.address,
+                'city': x.city,
+                'district': x.district,
+                'state': x.state
+
+            }
+        return {'Branches': list(map(lambda x: to_json(x), BranchModel.query.all()))}
         # return cls.query.filter_by(name = name).first()   filter(and_(bank_id == idInt, city=city))))}

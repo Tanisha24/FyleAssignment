@@ -29,7 +29,9 @@ api.add_resource(resources.TokenRefresh, '/token/refresh')
 api.add_resource(resources.AllUsers, '/users')
 api.add_resource(resources.SecretResource, '/secret')
 api.add_resource(resources.BankDetailsResource, '/bankifsc')
-api.add_resource(resources.BranchesDetailsResource, '/branches')
+api.add_resource(resources.BranchesDetailsResource, '/branchesquery')
+api.add_resource(resources.AllBranches, '/branches')
+api.add_resource(resources.AllBanks, '/banks')
 
 @jwt.token_in_blacklist_loader
 def check_if_token_in_blacklist(decrypted_token):
