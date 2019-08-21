@@ -110,7 +110,11 @@ class BranchModel(db.Model):
         if page and page_size:
             query = query.limit(page_size)
             query = query.offset(int(page)*int(page_size))
-        return {name: list(map(lambda x: to_json(x), query))}
+        return {
+            "bank_name":name,
+            "city":city,
+            "branch_details": list(map(lambda x: to_json(x), query))
+        }
         # return {name: list(map(lambda x: to_json(x), BranchModel.query.filter_by(bank_id=idInt).filter_by(city=city)))}
 
     @classmethod
